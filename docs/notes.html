@@ -1,0 +1,120 @@
+<meta charset="utf-8">
+
+**Research Notes**
+
+Overview
+================
+
+Author : Jake Masters
+
+Started : 6/12/19
+
+Last Updated : 6/13/19
+
+
+Notes
+================
+
+I'm going to write a bootloader. 
+
+First, I'm going to look at xv6 and see how the group at PDOS did it. 
+
+Boot process:
+    - Upon powering on, most x86 machines kick off by soliciting the BIOS chip. 
+    - The BIOS chip then transfers control to the designated **boot sector**. 
+    - The **boot sector** is the first 512 bytes on the boot disk. 
+
+Registers:
+    - While simulating an Intel 8088, there are
+        - 8 16bit general-purpose registers
+            - %ax return register :)
+        - 4 16bit segment registers
+            - %cs for instruction fetches
+            - %ds data read/write
+            - %es "extra" segment? idk what this is
+            - %ss stack read/write
+        - processor sends 20 bits of address to memory, which come from segment register + gp register
+
+how is it that a process can have a new program exec()ed onto it? the answer is the ELF format.
+
+xv6
+================
+
+So xv6 consists of 102 files. 
+
+Of these files, 8 are used directly as part of the boot process:
+    - bootasm.S
+        - memlayout.h
+        - mmu.h
+        - asm.h
+    - bootmain.c
+        - types.h
+        - elf.h
+        - x86.h
+
+nvm the xv6 printout actually divides up all the files into 11 categories
+
+
+NASM bootloader (6/13)
+================
+
+- The alleged "bootloader" is loaded into memory at 0x007c00
+- The alleged "bootloader" should be 512 bytes in length, meaning the next available address should be 0x007e00
+- So what if instead of starting our "stack" at 7CO, we started it at 0x7e00?
+
+Let's map this out:
+   bootloader...stack.......sp
+---|------------|-----------|---
+   0x7c00 (512) 0x7e00 (8k) 0x2000
+
+- ds holds address where data region starts
+
+BIOS interrupts:
+================
+- `0x10` has a bunch of video stuff
+- `0x13` has a ton of disk stuff
+- `0x16` has a bunch of keyboard stuff
+- `0x1A` has a bunch of time stuff
+
+A note about stack stuff:
+=========================
+- Caller-save:
+    - Only needed if the calling function needs to reference its local data after callee function returns. 
+    - Save registers before calling another function, restored after callee returns
+    - This is the responsibility of the caller. 
+- Callee-save:
+    - Always do this!
+
+Example... in boot.S:
+    1. push bp to stack
+    2. mov bp <- sp (base is set to top of stack (aka sp))
+    3. push all general-purpose registers to stack
+    4. { do stuff }
+    5. restore (aka pop) all general-purpose registers
+    6. mov sp <- bp (top of stack is now what it should be, is this really necessary though?)
+    7. pop bp
+    8. stack is now what it was before function ran
+
+Also another cool thing I discovered: there's an x86 instruction called RDTSC that measures clock cycles. 
+
+Commands:
+=========
+Assemble:
+```
+$ nasm -f bin src/boot.S -o boot.out
+```
+Run on bochs:
+```
+$ bochs -f bochsrc.txt
+```
+Run on qemu:
+```
+$ qemu-system-i386 -fda boot.out
+```
+
+PathOS : Performant and Theoretically Helpful Operating System
+LogOS  : Logically Organized Generative Operating System
+EthOS  : Eternally Theologically Heretical Operating System
+         Existentially Threatened 
+
+<!-- Markdeep: --><style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style><script src="markdeep.min.js"></script><script src="https://casual-effects.com/markdeep/latest/markdeep.min.js"></script><script>window.alreadyProcessedMarkdeep||(document.body.style.visibility="visible")</script>
