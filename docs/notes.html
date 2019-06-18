@@ -12,6 +12,15 @@ Started : 6/12/19
 Last Updated : 6/13/19
 
 
+Resources:
+==========
+Here are some amazing resources:
+    - [Operating Systems Development](http://www.brokenthorn.com/Resources/OSDev0.html) (amazing)
+    - [xv6](https://github.com/mit-pdos/xv6-public)
+    - [biscuit](https://github.com/mit-pdos/biscuit)
+    - [a decent bootloader tutorial](http://joebergeron.io/posts/post_two.html)
+    - [an ok bootloader tutorial](https://blog.ghaiklor.com/2017/10/21/how-to-implement-your-own-hello-world-boot-loader/)
+
 Notes
 ================
 
@@ -112,9 +121,40 @@ Run on qemu:
 $ qemu-system-i386 -fda boot.out
 ```
 
-PathOS : Performant and Theoretically Helpful Operating System
-LogOS  : Logically Organized Generative Operating System
-EthOS  : Eternally Theologically Heretical Operating System
-         Existentially Threatened 
+Names:
+======
+
+- PathOS
+    - Performant and Theoretically Helpful Operating System
+- LogOS
+    - Logically Organized Generative Operating System
+- EthOS
+    - Eternally Theologically Heretical Operating System
+    - Existentially Threatened 
+
+
+Processor Modes:
+================
+- Real Mode: 
+    - 16-bit registers
+    - 1 MB memory
+    - **segment:offset** memory model
+        - (segment*16 + offset) = exact memory address
+    - stuff is unsafe
+
+- Protected Mode: 
+    - 32-bit registers
+    - 4 GB RAM
+    - a bit trickier, easy to triple fault
+
+- Unreal Mode:
+    - basically Real Mode with 4 GB memory
+    - kind of a hack
+
+- Virtual 8086 Mode
+    - Protected Mode with a simulated Real Mode
+    - allows use of BIOS interrupts (only available in Real Mode)
+
+
 
 <!-- Markdeep: --><style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style><script src="markdeep.min.js"></script><script src="https://casual-effects.com/markdeep/latest/markdeep.min.js"></script><script>window.alreadyProcessedMarkdeep||(document.body.style.visibility="visible")</script>
