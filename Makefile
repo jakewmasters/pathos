@@ -1,5 +1,5 @@
 make:
-	nasm -f bin src/boot.s -o boot.out
+	nasm -f bin src/boot-core.s -o boot.out
 
 bochs:
 	bochs -f bochsrc.txt
