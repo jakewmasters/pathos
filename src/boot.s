@@ -9,17 +9,18 @@
 bits 16
 org 0x7c00 ; i think this is a segment:offset address
 
-
 ; starting point
-start: jmp loader
+start: 
+    jmp loader
 
-; helper stuff to be called by loader
-msg db "Welcome!", 0
+; variables
+msg db "PathOS v0.1!", 0
 
-cool:
+stuff:
     call clearscreen
     call movecursor
     call writeline
+    jmp end
 
 clearscreen:
     ; this block just prints some stuff
@@ -47,7 +48,14 @@ movecursor:
     int    0x10
 
 writeline:
-    nop ; multiple ways to do this
+    mov    si, msg
+    mov    ah, 0x0E
+.loop lodsb
+    or     al, al
+    jz     end
+    int 0x10
+    jmp .loop
+    
 
 ; do some cool stuff
 ; see all of this depends on what you want to do
@@ -56,14 +64,9 @@ writeline:
 ; clear interrupt flag
 ; enter halt state
 loader:
-    ;xor  ax, ax
-    ;mov  ds, ax
-    ;mov  es, ax
-    ;mov  si, msg
-    call  cool
-    ;xor  ax, ax
-    ;int  0x12
+    call  stuff
 
+end:
     cli
     hlt
 
