@@ -7,7 +7,7 @@ main()
     FILE *fp;
     int c;
 
-    fp = fopen("boot.out", "rb");
+    fp = fopen("out/boot.out", "rb");
     if (fp == NULL){
         fprintf(stderr, "error opening file\n");
         exit(1);

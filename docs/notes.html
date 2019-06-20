@@ -167,6 +167,31 @@ Birds-Eye View:
         - Give the piano the best chords you can, and then connect them to some nice keys and call it a day. 
         - Like who cares if a piano has shiny ivory keys if it sounds like trash. 
         - "Think of operating systems like pianos, sure they can have shiny ivory keys, but it doesn't matter if the chords are terrible and it sounds like trash." - Jake Masters
-        
+
+Multi-Stage Bootloaders:
+========================
+Back to the grind!
+
+Stage 1 needs to do the following:
+    - Starting out in 16-bit real mode
+    - needs to set program origin (org) somewhere
+        - `Boot1.asm` starts this at 0, not sure why.
+
+Stage 2 needs to do the following:
+    - Starting out in 16-bit real mode
+    - program origin needs to be set
+        - demo1 sets this to 0x00
+        - demo3 has this at 0x500
+
+The CMU lab write-up actually suggests the following memory map:
+    - Avoid the first 4K of memory, it's reserved BIOS stuff.
+    - boot0 should go in 0x7c00 through 0x7dff. That's 512 bytes. 
+
+Here is my ideal memory map:
+    - 0x0000 - 0x03ff IVT
+    - 0x0400 - 0x04ff BIOS data
+    - 0x0500 - 0x7bff 30K of free real estate
+    - 0x7c00 - 0x7dff boot0
+    - 0x7e00 - beyond who cares
 
 <!-- Markdeep: --><style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style><script src="markdeep.min.js"></script><script src="https://casual-effects.com/markdeep/latest/markdeep.min.js"></script><script>window.alreadyProcessedMarkdeep||(document.body.style.visibility="visible")</script>
