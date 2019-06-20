@@ -2,7 +2,7 @@ make:
 	nasm -f bin src/boot0.asm -o out/boot.out
 
 bochs:
-	bochs -f bochsrc.txt
+	bochs -f bochsrc.txt -q
 
 qemu:
 	qemu-system-i386 -fda out/boot.out

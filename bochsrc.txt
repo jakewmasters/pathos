@@ -1,8 +1,9 @@
 megs: 32
-romimage: file=/usr/share/bochs/BIOS-bochs-latest, address=0xfffe0000
+display_library: sdl
+romimage: file=/usr/share/bochs/BIOS-bochs-latest
 vgaromimage: file=/usr/share/bochs/VGABIOS-lgpl-latest
-floppya: 1_44=out/boot.out, status=inserted
-boot: a
+ata0-master: type=cdrom, path=os.iso, status=inserted
+boot: cdrom
 log: bochsout.txt
-mouse: enabled=0
-display_library: x, options="gui_debug"
+clock: sync=realtime, time0=local
+cpu: count=1, ips=1000000

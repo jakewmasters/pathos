@@ -194,4 +194,18 @@ Here is my ideal memory map:
     - 0x7c00 - 0x7dff boot0
     - 0x7e00 - beyond who cares
 
+So how does the loading part actually work?
+    - The tutorial basically implements FAT12 to do this...
+        - Ultimately, they're reading in root directory
+        First, they compute the size of the entire root directory per RDE. 
+            - (32 bytes * numRDEs) / bytesPerSector = RootDirectorySectors
+    - There has to be a simpler way. 
+
+
+GRUB Pivot:
+===========
+Alright so it turns out that bootloaders are really hard.  
+I kinda just want to use GRUB for now, and once I have a debuggable kernel, come back to the bootloader. 
+
+
 <!-- Markdeep: --><style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style><script src="markdeep.min.js"></script><script src="https://casual-effects.com/markdeep/latest/markdeep.min.js"></script><script>window.alreadyProcessedMarkdeep||(document.body.style.visibility="visible")</script>
