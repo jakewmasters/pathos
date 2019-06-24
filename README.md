@@ -1,7 +1,9 @@
 # PathOS
 Performant and Theoretically Helpful Operating System  
 
-Currently just a little bootloader. 
+Currently able to set `eax` to `0xDEADBEEF` from a C program.  
+
+Using GRUB as a drop-in bootloader for now. 
 
 ## Build
 Assemble:

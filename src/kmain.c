@@ -1,4 +1,4 @@
-int _start()
+int kmain()
 {
     return 0xDEADBEEF;
 }
