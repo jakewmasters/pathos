@@ -23,11 +23,10 @@ align 4
 
 loader:
     mov edx, 0xCAFEBABE
-;.loop:
-;    jmp .loop
 
 higher_half:
     mov esp, kernel_stack + KERNEL_STACK_SIZE
+    mov edx, 0x00c0ffee
 
 enter_kernel:
     call kernel

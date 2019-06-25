@@ -23,5 +23,9 @@ kernel()
     char str2[64] = "A Jake Masters Production.";
     fb_write_str(12, 27, str2, BLACK, CYAN);
 
+    // note: might be having trouble with strings because of either: 
+    //  - rodata problems (linker script)
+    //  - stack problems... need to set up GDT
+
     return 0xDEADBEEF;
 }
