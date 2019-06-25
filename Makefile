@@ -9,7 +9,7 @@ bochs:
 	bochs -f bochsrc.txt -q
 
 qemu:
-	qemu-system-i386 -fda out/boot.out
+	qemu-system-i386 -boot d -cdrom os.iso -m 512
 
 dump:
 	gcc -Wall src/boot-dump.c -o out/test

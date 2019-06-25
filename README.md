@@ -1,9 +1,13 @@
 # PathOS
 Performant and Theoretically Helpful Operating System  
 
-Currently able to set `eax` to `0xDEADBEEF` from a C program.  
+Currently a small, bootable microkernel. 
 
-Using GRUB as a drop-in bootloader for now. 
+## Organization
+
+Currently using GRUB as a drop-in bootloader for now. See `iso/boot/`. 
+
+GRUB then starts executing the x86 code found in `loader.s`, which finally transfers control to `kernel.c`. 
 
 ## Build
 Assemble:
