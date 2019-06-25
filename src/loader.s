@@ -2,7 +2,7 @@
 
 global loader
 
-extern kmain
+extern kernel
 
 ; headers
 MAGIC_NUMBER equ 0x1BADB002
@@ -29,8 +29,8 @@ loader:
 higher_half:
     mov esp, kernel_stack + KERNEL_STACK_SIZE
 
-enter_kmain:
-    call kmain
+enter_kernel:
+    call kernel
 
 hang:
     jmp hang
