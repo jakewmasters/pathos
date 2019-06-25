@@ -24,4 +24,5 @@
  extern void fb_write(unsigned int i, unsigned char c, unsigned char bg, unsigned char fg);
  extern void fb_move_cursor(unsigned int row, unsigned int col);
  extern void fb_clear();
+ extern void fb_write_str(unsigned int row, unsigned int col, const char *str, unsigned char bg, unsigned char fg);
  

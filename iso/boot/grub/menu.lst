@@ -1,5 +1,5 @@
 default=0
 timeout=0
 
-title os
+title PathOS
 kernel /boot/kernel.elf
