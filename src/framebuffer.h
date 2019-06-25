@@ -21,4 +21,7 @@
 /*
  * available functions
  */
- extern void buff_write(unsigned int i, unsigned char c, unsigned char bg, unsigned char fg);
+ extern void fb_write(unsigned int i, unsigned char c, unsigned char bg, unsigned char fg);
+ extern void fb_move_cursor(unsigned int row, unsigned int col);
+ extern void fb_clear();
+ 

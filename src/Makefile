@@ -1,4 +1,4 @@
-OBJECTS = loader.o kernel.o framebuffer.o
+OBJECTS = loader.o kernel.o framebuffer.o io.o
 
 CC = gcc
 CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -fomit-frame-pointer -Wno-unused-function -c
