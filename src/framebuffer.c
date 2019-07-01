@@ -43,7 +43,7 @@ void
 fb_clear()
 {
     // framebuffer is 25 rows x 80 cols
-    for (int i=0; i < 1280; ++i){
+    for (int i=0; i < 2000; ++i){
         fb_write(i, ' ', 0, 8);
     }
 }
