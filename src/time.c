@@ -1,3 +1,4 @@
+#include "io.h"
 /*
  * time library
  */
@@ -18,13 +19,41 @@ rdtsc()
     return tsc;
 }
 
-void
-sleep(unsigned long long nanoseconds)
+unsigned long long
+get_median_clock_rate()
 {
-    unsigned long long init_tsc = rdtsc();
-    unsigned long long end_tsc = init_tsc + nanoseconds;
-    while (rdtsc() < end_tsc){
-        continue;
-    }
+    unsigned base, max;
+    __asm__("mov $0x16, %%eax \n\t"
+    "cpuid \n": "=a"(base), "=b"(max));
+
+    return ((base+max)/2);
+}
+
+/*
+ * driver function to access CMOS and the Real-Time Clock (RTC)
+ */
+unsigned long
+rtc(unsigned char option)
+{
+    // lets just get the seconds value as a test
+    outb(CMOS_WRITE_PORT, (0 << 7) | (option));
+    unsigned long hour = inb(CMOS_READ_PORT);
+    return hour;
+}
+
+void
+sleep(unsigned int seconds)
+{
+    // unsigned long long init_tsc = rdtsc();
+    // unsigned long long offset = get_median_clock_rate() * seconds;
+    // unsigned long long end_tsc = init_tsc + offset;
+    // while (rdtsc() < end_tsc){
+    //     continue;
+    // }
+    // return;
+
+    // try using rtc
+    unsigned long init_sec = rtc(CMOS_SECONDS);
+    while (rtc(CMOS_SECONDS) <= init_sec + seconds){}
     return;
 }

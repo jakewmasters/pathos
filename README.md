@@ -43,9 +43,12 @@ Various GRUB-related build stuff is located in the top-level `iso/` directory.
 ## Design Decisions
 
 ### Timing
-I decided to use the TSC (Time Stamp Counter) for sake of simplicity and efficiency. 
+I decided to use the TSC (Time Stamp Counter) for sake of **simplicity** and **efficiency**. 
 While it relates more to clock rate than actual time elapsed, the TSC is easily accessed via the `RDTSC` x86 instruction. 
-A [benchmark by Red Hat](https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_MRG/2/html/Realtime_Reference_Guide/chap-Timestamping.html) showed that TSC is 20 times more efficient than HPET. 
+A [benchmark by Red Hat](https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_MRG/2/html/Realtime_Reference_Guide/chap-Timestamping.html) showed that TSC is 20 times more efficient than HPET.  
+
+The tradeoff I'm making here is **portability**. Not all processors have a TSC register. 
+With this in mind, PathOS currently only ports to Intel processors starting at the Pentium model (1993+).  
 
 In the future I would like to add support for HPET (High Precision Event Timer). 
 HPET is more scalable and synchronizes well across multiple processors. 
