@@ -231,5 +231,21 @@ So apparently there are instructions for GDT related stuff...
 (see p. 144)
 
 
+Pseudo-Random Notes: (7/3)
+=============
+
+I'll be fine operating in 32-bit protected mode if I can get there. 
+That provides a 4GB address space. OSTEP Ch. 13 provides a model for what this looked like in early systems. 
+
+In most process models, code is usually thought of as static, allowing it to be placed in some arbitrary spot in a process's address space. 
+What if I designed and implemented a process model that allows for a dynamic code block, where code can self-modify at runtime?
+    - Could there be a flag in a source program that designates whether runtime-code-modification should be enabled or not?
+      Could the OS detect that flag and create a special process accordingly?
+      - This wouldn't allow for changes outside of that process's address space, it would instead allocate the .text section differently. 
+
+Found a few new resources today:
+    - [a concise os tutorial](https://github.com/cfenollosa/os-tutorial)
+    - [a pdf from some university in the UK with some good stuff](http://www.cs.bham.ac.uk/~exr/lectures/opsys/10_11/lectures/os-dev.pdf)
+
 
 <!-- Markdeep: --><style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style><script src="markdeep.min.js"></script><script src="https://casual-effects.com/markdeep/latest/markdeep.min.js"></script><script>window.alreadyProcessedMarkdeep||(document.body.style.visibility="visible")</script>

@@ -3,6 +3,14 @@
 #include "time.h"
 #include "io.h"
 
+#if !defined(__linux__) // cheating here, need to actually use cross-compiler
+#error "need to use cross-compiler"
+#endif
+
+#if !defined(__i386__)
+#error "compile for the right target ;)"
+#endif
+
 /*
  * kernel entry point
  */

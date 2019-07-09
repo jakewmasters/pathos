@@ -8,12 +8,13 @@ extern kernel
 MAGIC_NUMBER equ 0x1BADB002
 FLAGS equ 0x0
 CHECKSUM equ -MAGIC_NUMBER
-KERNEL_STACK_SIZE equ 4096
+KERNEL_STACK_SIZE equ 16384 ; 16K stack
 
 section .bss
-align 4
-kernel_stack:
+align 16
+stack_bottom:
     resb KERNEL_STACK_SIZE
+stack_top:
 
 section .text:
 align 4
@@ -25,7 +26,7 @@ loader:
     mov edx, 0xCAFEBABE
 
 higher_half:
-    mov esp, kernel_stack + KERNEL_STACK_SIZE
+    mov esp, stack_top
     mov edx, 0x00c0ffee
 
 enter_kernel:
