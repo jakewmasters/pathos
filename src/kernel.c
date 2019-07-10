@@ -3,7 +3,7 @@
 #include "time.h"
 #include "io.h"
 
-#if !defined(__linux__) // cheating here, need to actually use cross-compiler
+#if defined(__linux__) // cheating here, need to actually use cross-compiler
 #error "need to use cross-compiler"
 #endif
 

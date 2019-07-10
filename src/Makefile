@@ -1,6 +1,6 @@
 OBJECTS = loader.o kernel.o framebuffer.o io.o pathstd.o time.o
 
-CC = gcc
+CC = i686-elf-gcc
 CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -fomit-frame-pointer -Wno-unused-function -c
 LDFLAGS = -T link.ld -melf_i386
 AS = nasm
