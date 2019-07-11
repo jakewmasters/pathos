@@ -1,10 +1,14 @@
+# Bootloader Makefile
+
 AS = nasm
 
+# quick macro to build and run really fast
+all:
+	make build && make floppy && make first && make qemu
 
-# default make: build object files for each asm source
+# build object files for each asm source
 build: 
-	$(AS) -f bin bootloader.asm -o bootloader
-	$(AS) -f bin sample.asm -o sample
+	$(AS) -f bin bootloader.s -o bootloader
 
 # creates a blank floppy disk
 floppy:
@@ -18,8 +22,12 @@ first:
 second:
 	dd if=sample of=disk.img bs=512 count=1 seek=1
 
-# run qemu with remote gdb session enabled
+# run qemu
 qemu:
+	qemu-system-i386 -machine q35 -fda disk.img
+
+# run qemu with remote gdb session enabled
+qemu-debug:
 	qemu-system-i386 -machine q35 -fda disk.img -gdb tcp::26000 -S
 
 # clean up build files
