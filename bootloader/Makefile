@@ -8,7 +8,7 @@ all:
 
 # build object files for each asm source
 build: 
-	$(AS) -f bin bootloader.s -o bootloader
+	$(AS) -f bin boot32.s -o bootloader
 
 # creates a blank floppy disk with 2880 512-byte sectors
 floppy:

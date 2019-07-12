@@ -1,6 +1,9 @@
 ; PathOS bootloader
 ; by Jake Masters
 
+; this bootloader utilizes BIOS routines
+; therefore it must stay in 16-bit real mode
+
 [org 0x7c00]
 start:
     mov [BOOT_DRIVE], dl
@@ -41,9 +44,6 @@ start:
     ; print msg
     mov bx, MODE_MSG
     call print_string
-
-stage2:
-    nop
 
 hang:
     jmp hang
