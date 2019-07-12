@@ -14,19 +14,18 @@ start:
     mov bp, 0x8c00 ; 4 kb past start of code
     mov sp, bp
 
-    ; load 5 sectors from boot disk
+    ; load 2 sectors from boot disk
     mov bx, 0x9000        ; bx = buffer
-    mov dh, 5             ; 5 sectors
+    mov dh, 2             ; 2 sectors
     mov dl, [BOOT_DRIVE]  ; drive set to BOOT_DRIVE
     call disk_load
 
     ; check to see if sectors loaded correctly
     mov dx, [0x9000] ; 2 bytes of hex data stored in dx
-    call print_hex
+    call print_hex   ; should print first word of sector 2
 
-    ; test second print_hex
-    mov dx, 0x1234
-    call print_hex
+    mov dx, [0x9200] ; first word of sector 3
+    call print_hex   ; should print 0xface
 
 hang:
     jmp hang
@@ -114,6 +113,6 @@ HEX_OUT: db '0x0000', 0
 times 510-($-$$) db 0
 dw 0xaa55
 
-; fill up some other sectors
+; fill up 2 other sectors
 times 256 dw 0xdada
-times 256 dw 0xdada
+times 256 dw 0xface
