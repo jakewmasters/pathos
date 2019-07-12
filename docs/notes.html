@@ -248,4 +248,32 @@ Found a few new resources today:
     - [a pdf from some university in the UK with some good stuff](http://www.cs.bham.ac.uk/~exr/lectures/opsys/10_11/lectures/os-dev.pdf)
 
 
+Getting into the thick of it: (7/11)
+=============================
+
+So apparently GRUB already sets up a GDT... so until I stop using GRUB, I don't need to define a GDT. 
+
+What's next?
+    - Keep going until stuff unexplainably breaks, then implement own bootloader. 
+
+Alright it's time to start from scratch - got to write my own bootloader. 
+
+
+
+Scratch: starting from the very bottom.
+=======================================
+
+Here are the resources I am comparing in figuring out how to write my bootloader: 
+    - Writing an Operating System from Scratch by Nick Blundell
+    - James Molloy's Kernel Development Tutorials (nvm this uses GRUB)
+    - Bran's Kernel Development (nvm this uses GRUB)
+    - OSDev Bare Bones (nvm this uses GRUB)
+So looks like only OS from Scratch will actually be helpful... 
+
+Where I'm at now (as of end of day 7/11):
+    - Everything I'm doing is in the `bootloader/` directory. 
+    - My make file works, it even has a nice, fast macro for the default make. 
+    - First I'm going through OS from Scratch (PDF) since it has a good example of a multi-stage bootloader. 
+
+
 <!-- Markdeep: --><style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style><script src="markdeep.min.js"></script><script src="https://casual-effects.com/markdeep/latest/markdeep.min.js"></script><script>window.alreadyProcessedMarkdeep||(document.body.style.visibility="visible")</script>
