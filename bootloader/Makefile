@@ -4,7 +4,7 @@ AS = nasm
 
 # quick macro to build and run really fast
 all:
-	make build && make floppy && make write && make qemu
+	make build && make floppy && make write
 
 # build object files for each asm source
 build: 
