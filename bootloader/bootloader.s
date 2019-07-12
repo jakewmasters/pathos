@@ -20,12 +20,30 @@ start:
     mov dl, [BOOT_DRIVE]  ; drive set to BOOT_DRIVE
     call disk_load
 
+    ; clear screen before output
+    call clearscreen
+
+    ; move cursor to top left
+    mov dx, 0x0000
+    call move_cursor
+
     ; check to see if sectors loaded correctly
     mov dx, [0x9000] ; 2 bytes of hex data stored in dx
     call print_hex   ; should print first word of sector 2
 
     mov dx, [0x9200] ; first word of sector 3
     call print_hex   ; should print 0xface
+
+    ; move cursor to next row
+    mov dh, 0x1
+    mov dl, 0x0
+    call move_cursor
+    ; print msg
+    mov bx, MODE_MSG
+    call print_string
+
+stage2:
+    nop
 
 hang:
     jmp hang
@@ -61,6 +79,25 @@ loop:
     add bx, 1
     cmp al, 0    ; stops when null byte found
     jne loop
+    popa
+    ret
+
+clearscreen:
+    pusha
+    mov ax, 0x0700  ; scroll mode
+    mov bh, 0x0b    ; 0x[back][text]
+    mov cx, 0x0000  ; top left corner
+    mov dx, 0x184f  ; bottom right corner
+    int 0x10
+    popa
+    ret
+
+; dh = row, dl = col
+move_cursor:
+    pusha
+    mov ah, 0x02  ; cursor mode
+    mov bh, 0x00  ; page number
+    int 0x10
     popa
     ret
 
@@ -108,6 +145,7 @@ digits:
 BOOT_DRIVE: db 0
 DISK_ERROR_MSG db "Could not read disk...", 0
 HEX_OUT: db '0x0000', 0
+MODE_MSG: db "Moving from 16-bit REAL mode to 32-bit PROTECTED mode...", 0
 
 ; sign boot sector
 times 510-($-$$) db 0
