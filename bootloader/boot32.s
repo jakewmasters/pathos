@@ -22,7 +22,7 @@ start:
     call load_kernel
 
     ; the BIG switch
-    ;call switch_to_pm  ; all good up to HERE (7/12 @ 4:30 pm)
+    call switch_to_pm  ; all good up to HERE (7/12 @ 4:30 pm)
     
     jmp hang ; should never reach this
 
@@ -32,12 +32,12 @@ hang:
 bios_print:
     pusha
     mov ah, 0x0e
-loop:
+bios_loop:
     mov al, [bx] ; bx will have string to print
     int 0x10
     add bx, 1
     cmp al, 0    ; stops when null byte found
-    jne loop
+    jne bios_loop
     popa
     ret
 
@@ -96,7 +96,13 @@ disk_error:
     call bios_print
     jmp hang
 
-
+switch_to_pm:
+    cli
+    lgdt [gdt_descriptor]
+    mov eax, cr0
+    or eax, 0x1
+    mov cr0, eax
+    jmp CODE_SEG:init_pm
 
 
 
@@ -110,82 +116,72 @@ disk_error:
 
 [bits 32]
 BEGIN_PM:
-    ;mov ebx, PROT_MSG
-    ;call print_string
+    mov ebx, PROT_MSG
+    call print_string
 
     jmp hang
 
+;; 32-bit helper functions ;;
 
-;; extra functions ;;
+init_pm:
+    mov ax, DATA_SEG
+    mov ds, ax
+    mov ss, ax
+    mov es, ax
+    mov fs, ax
+    mov gs, ax
+    mov ebp, 0x90000
+    mov esp, ebp
+    call BEGIN_PM
 
-; IGNORE / COMMENT EVERYTHING BELOW ;
+; 32-bit print to VRAM
+print_string:
+    pusha
+    mov edx, VRAM
+loop:
+    mov al, [ebx]
+    mov ah, COLOR
+    cmp al, 0
+    je done
+    mov [edx], ax
+    add ebx, 1
+    add edx, 2
+    jmp loop
+done:
+    popa
+    ret
 
-;print_string:
-;    pusha
-;    mov edx, VRAM
-;loop:
-;    mov al, [ebx]
-;    mov ah, COLOR
-;    cmp al, 0
-;    je done
-;    mov [edx], ax
-;    add ebx, 1
-;    add edx, 2
-;    jmp loop
-;done:
-;    popa
-;    ret
+; gdt stuff;
+gdt_start:
 
-;switch_to_pm:
-;    cli
-;    lgdt [gdt_descriptor]
-;    mov eax, cr0
-;    or eax, 0x1
-;    mov cr0, eax
-;    jmp CODE_SEG:init_pm
+gdt_null:
+    dd 0x0
+    dd 0x0
 
-;init_pm:
-;    mov ax, DATA_SEG
-;    mov ds, ax
-;    mov ss, ax
-;    mov es, ax
-;    mov fs, ax
-;    mov gs, ax
-;    mov ebp, 0x90000
-;    mov esp, ebp
-;    call BEGIN_PM  ; final thing
+gdt_code:
+    dw 0xffff
+    dw 0x0
+    db 0x0
+    db 10011010b
+    db 11001111b
+    db 0x0
 
-;gdt_start:
+gdt_data:
+    dw 0xffff
+    dw 0x0
+    db 0x0
+    db 10010010b
+    db 11001111b
+    db 0x0
 
-;gdt_null:
-;    dd 0x0
-;    dd 0x0
+gdt_end:
 
-;gdt_code:
-;    dw 0xffff
-;    dw 0x0
-;    db 0x0
-;    db 10011010b
-;    db 11001111b
-;    db 0x0
+gdt_descriptor:
+    dw gdt_end - gdt_start - 1
+    dd gdt_start
 
-;gdt_data:
-;    dw 0xffff
-;    dw 0x0
-;    db 0x0
-;    db 10010010b
-;    db 11001111b
-;    db 0x0
-
-;gdt_end:
-
-;gdt_descriptor:
-;    dw gdt_end - gdt_start - 1
-;    dd gdt_start
-
-
-
-
+CODE_SEG equ gdt_code - gdt_start
+DATA_SEG equ gdt_data - gdt_start
 
 
 ; bootloader variables
@@ -196,8 +192,6 @@ DISK_ERROR_MSG db "Could not read disk...", 0
 LOAD_MSG db "Loading kernel into memory...", 0
 REAL_MSG db "Starting in 16-bit real mode...", 0
 PROT_MSG db "Switched to 32-bit protected mode!", 0
-;CODE_SEG equ gdt_code - gdt_start
-;DATA_SEG equ gdt_data - gdt_start
 
 ; sign boot sector
 times 510-($-$$) db 0
