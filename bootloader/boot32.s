@@ -138,6 +138,7 @@ init_pm:
 print_string:
     pusha
     mov edx, VRAM
+    add edx, 480    ; shifting (3 rows * 80 cols * 2 bytes per entry)
 loop:
     mov al, [ebx]
     mov ah, COLOR
