@@ -12,11 +12,11 @@ The bootloader ultimately calls `kmain()`.
 This function is found in `kernel.c`, which is found in the `src` directory. 
 
 All kernel modules are currently found within the `src` directory. 
-These include: 
-    - A simple framebuffer driver. 
-    - A time library. 
-    - A minimal C standard library. 
-    - A module for reading and writing to I/O ports. 
+These include:  
+- A simple framebuffer driver. 
+- A time library. 
+- A minimal C standard library. 
+- A module for reading and writing to I/O ports. 
 
 ## Build
 Assemble:
@@ -53,9 +53,9 @@ Various GRUB-related build stuff is located in the top-level `iso/` directory.
 For sake of simplicity, I am using the most minimal Global Descriptor Table possible, described by Intel as the *basic flat model*. 
 
 My GDT consists of three segment descriptors: 
-    - The null segment descriptor, required by default. 
-    - The code segment descriptor, which denotes the region containing all executable instructions. 
-    - The data segment descriptor, which denotes the region containing all non-executable data. 
+- The null segment descriptor, required by default. 
+- The code segment descriptor, which denotes the region containing all executable instructions. 
+- The data segment descriptor, which denotes the region containing all non-executable data. 
 
 ### Timing
 I decided to use the TSC (Time Stamp Counter) for sake of **simplicity** and **efficiency**. 
