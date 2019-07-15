@@ -40,6 +40,10 @@ final:
 
 # run on qemu
 qemu:
+	qemu-system-i386 -fda os-image
+
+# run on qemu with debug session
+debug:
 	qemu-system-i386 -fda os-image -S -gdb tcp::26000
 
 # run on bochs

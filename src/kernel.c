@@ -63,7 +63,7 @@ int kmain(){
     fb_clear();
     isrs_init();
 
-    __asm__ __volatile__("int $2");
+    __asm__ __volatile__("int $0");
 
     fb_write_str(3,0,"Wow we made it!", BLACK, LIGHT_BLUE);
 
