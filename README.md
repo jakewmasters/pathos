@@ -3,9 +3,10 @@ Performant and Theoretically Helpful Operating System
 
 Currently a small, bootable microkernel. 
 
+While the development of this project has been heavily inspired by a plethora of sources, all code in this repository is my own. 
+
 ## Organization
 
-I originally started out using GRUB, but I ended up deciding to write my own bootoader. 
 All code related to the boot process is found in the `bootloader/` directory.   
 
 The bootloader ultimately calls `kmain()`.
@@ -19,7 +20,7 @@ These include:
 - A module for reading and writing to I/O ports. 
 
 ## Build
-Assemble:
+Build image:
 ```
 $ make
 ```
@@ -34,18 +35,6 @@ $ make qemu
 
 On my machine, `qemu` is a little bit faster to get up and going with, but `bochs` has a lot of useful debug functionality.  
 Pick your poison.
-
-## Current State
-This project is in the middle of a major pivot.   
-
-I am currently able to boot my C kernel using GRUB, 
-however I am nearly finished building my own bootloader. 
-
-Everything related to my own custom bootloader is located in the top-level `bootloader` directory of this project.  
-
-My own personal notes, remarks, and various scribblings are located in the top-level `docs/` directory.  
-
-Various GRUB-related build stuff is located in the top-level `iso/` directory.  
 
 ## Design Decisions
 
