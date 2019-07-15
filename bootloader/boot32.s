@@ -126,7 +126,7 @@ BEGIN_PM:
     call print_string
 
     ; call kernel
-    ;call KERNEL_OFFSET  ; here we go!
+    call KERNEL_OFFSET  ; here we go!
 
     jmp hang
 

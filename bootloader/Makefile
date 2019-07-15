@@ -8,6 +8,15 @@ LD = ld
 all:
 	make build && make floppy && make write
 
+# trying to do everything at once
+test:
+	nasm boot32.s -f bin -o boot.bin
+	gcc -m32 -ffreestanding -fno-pie -c kernel.c -o kernel.o
+	ld -o kernel.bin -melf_i386 -Ttext 0x1000 kernel.o --oformat binary
+	cat boot.bin kernel.bin > os-image
+	qemu-system-i386 -fda os-image -gdb tcp::26000 -S
+	# bochs
+
 # build object files for each asm source
 build: 
 	$(AS) -f bin boot32.s -o bootloader
@@ -44,7 +53,7 @@ bochs:
 
 # clean up build files
 clean:
-	rm bootloader disk.img sample *.o
+	rm bootloader sample os-image bochsout.txt *.img *.o *.bin
 
 # gdb commands
 # set architecture i8086
