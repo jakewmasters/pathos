@@ -69,6 +69,7 @@ load_kernel:
     mov bx, LOAD_MSG
     call bios_print
 
+    ; load first 15 sectors off of disk
     mov bx, KERNEL_OFFSET
     mov dh, 15
     mov dl, [BOOT_DRIVE]
@@ -117,7 +118,15 @@ switch_to_pm:
 [bits 32]
 BEGIN_PM:
     mov ebx, PROT_MSG
+    mov ax, 480
     call print_string
+
+    mov ebx, LOAD_MSG
+    mov ax, 640
+    call print_string
+
+    ; call kernel
+    ;call KERNEL_OFFSET  ; here we go!
 
     jmp hang
 
@@ -137,8 +146,8 @@ init_pm:
 ; 32-bit print to VRAM
 print_string:
     pusha
-    mov edx, VRAM
-    add edx, 480    ; shifting (3 rows * 80 cols * 2 bytes per entry)
+    add eax, VRAM
+    mov edx, eax  ; move cursor by value stored in ax (1 row = 80 cols * 2 bytes per entry)
 loop:
     mov al, [ebx]
     mov ah, COLOR

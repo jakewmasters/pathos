@@ -1,6 +1,8 @@
 # Bootloader Makefile
 
 AS = nasm
+CC = i686-elf-gcc
+LD = ld
 
 # quick macro to build and run really fast
 all:
@@ -9,6 +11,8 @@ all:
 # build object files for each asm source
 build: 
 	$(AS) -f bin boot32.s -o bootloader
+	#$(CC) -ffreestanding -c kernel.c -o kernel.o
+	#$(LD) -o kernel.bin -Ttext 0x1000 kernel.o --oformat binary
 
 # creates a blank floppy disk with 2880 512-byte sectors
 floppy:
@@ -40,7 +44,7 @@ bochs:
 
 # clean up build files
 clean:
-	rm bootloader disk.img sample
+	rm bootloader disk.img sample *.o
 
 # gdb commands
 # set architecture i8086
