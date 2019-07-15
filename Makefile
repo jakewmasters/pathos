@@ -1,21 +1,48 @@
-make:
-	cd src/ && make clean && make && cd .. && make -B iso && echo "Success! Now just run with Bochs (make bochs)"
+# PathOS Makefile
 
-iso:
-	cp src/kernel.elf iso/boot/kernel.elf
-	genisoimage -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -A PathOS -input-charset utf8 -quiet -boot-info-table -o pathos.iso iso
+AS = nasm
+CC = i686-elf-gcc
+LD = ld
 
-bochs:
-	bochs -f bochsrc.txt -q
+CFLAGS = -m32 -ffreestanding -fno-pie -c
+OBJECTS = kernel_entry.o kernel.o framebuffer.o io.o pathstd.o time.o
 
+# macro to build final image
+build:
+	make -B bootloader && make asm && make compile && make link && make final
+
+# build bootloader separate, since it's a bin not an elf
+bootloader:
+	$(AS) bootloader/boot32.s -f bin -o boot.bin
+
+# build all assembly parts as elfs
+asm:
+	$(AS) bootloader/kernel_entry.s -f elf -o kernel_entry.o
+	$(AS) src/io.s -f elf -o io.o
+
+# compile all c files into objects
+compile:
+	$(CC) $(CFLAGS) src/kernel.c -o kernel.o
+	$(CC) $(CFLAGS) src/framebuffer.c -o framebuffer.o
+	$(CC) $(CFLAGS) src/pathstd.c -o pathstd.o
+	$(CC) $(CFLAGS) src/time.c -o time.o
+
+# link everything into kernel.bin
+link:
+	$(LD) -o kernel.bin -melf_i386 -e kmain -Ttext 0x1000 $(OBJECTS) --oformat binary
+
+# concatenate binaries into final image
+final:
+	cat boot.bin kernel.bin > os-image
+
+# run on qemu
 qemu:
-	qemu-system-i386 -boot d -cdrom pathos.iso -m 512
+	qemu-system-i386 -fda os-image
 
-dump:
-	gcc -Wall src/boot-dump.c -o out/test
+# run on bochs
+bochs:
+	bochs
 
-log:
-	./out/test > out/test.log
-
+# clean up intermediate files
 clean:
-	rm *.iso bochsout.txt
+	rm *.bin *.o
