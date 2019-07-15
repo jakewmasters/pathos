@@ -1,11 +1,13 @@
-int placeholder(){
-    char *vram = (char *) 0xb8000;
-    *vram = 'Y';
-    return 0xdadaface;
-}
+#include "framebuffer.h"
+
+#if defined(__linux__) // cheating here, need to actually use cross-compiler
+#error "need to use cross-compiler"
+#endif
+
+#if !defined(__i386__)
+#error "compile for the right target ;)"
+#endif
 
 int kmain(){
-    char *vram = (char *) 0xb8000;
-    *vram = 'X';
-    return 0xdeadbeef;
+    fb_clear();
 }
