@@ -1,6 +1,7 @@
 #include "isr.h"
 #include "idt.h"
 #include "framebuffer.h"
+#include "pathstd.h"
 
 char *exception_messages[] = {
     "Division by zero",
@@ -20,7 +21,11 @@ isrs_init()
 
 // will have additional functionality, eventually
 void
-isr_handler()
+isr_handler(regs_t registers)
 {
-    fb_write_str(5,0,"received interrupt", BLACK, WHITE);
+    fb_write_str(5,0,"received interrupt: ", BLACK, WHITE);
+    char str[3];
+    d_str(registers.interrupt_num, str);
+    fb_write_str(6,0, str, BLACK, WHITE);
+    fb_write_str(7,0, exception_messages[registers.interrupt_num], BLACK, WHITE);
 }
