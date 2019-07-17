@@ -28,7 +28,7 @@ set_idt_entry(int i, unsigned int handler)
 void
 idt_init()
 {
-    fb_write_str(5,0,"Initializing IDT...", BLACK, WHITE);
+    // fb_write_str(5,0,"Initializing IDT...", BLACK, WHITE);
 
     // idt defined in header
     idt_desc.base = (unsigned int) &idt;
