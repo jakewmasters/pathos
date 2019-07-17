@@ -13,10 +13,39 @@ strlen(const char *str)
     return len;
 }
 
-// borrowed from Kernighan & Ritchie
+char *
+strcpy(char *str)
+{
+    unsigned int in_len = strlen(str) + 1;
+    // nevermind, i think i need malloc :(
+}
+
+/*
+ * reverses a string in place
+ * came up with this on my own :)
+ */
+void
+strrev(char *str)
+{
+    char aux_char = 0;
+    unsigned int front_index = 0;
+    unsigned int back_index = strlen(str)-1;
+    while(front_index < back_index){
+        aux_char = str[front_index];
+        str[front_index] = str[back_index];
+        str[back_index] = aux_char;
+        front_index++;
+        back_index--;
+    }
+}
+
+/*
+ * convert a base 10 decimal to a string
+ */
 void
 d_str(int d, char *str)
 {
+    // borrowed this part from Kernighan & Ritchie
     int i, sign;
     if ((sign = d) < 0) d = -d;
     i = 0;
@@ -25,4 +54,7 @@ d_str(int d, char *str)
     } while ((d /= 10) > 0);
     if (sign < 0) str[i++] = '-';
     str[i] = '\0';
+
+    // reverse
+    strrev(str);
 }
