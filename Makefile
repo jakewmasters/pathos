@@ -5,7 +5,7 @@ CC = i686-elf-gcc
 LD = ld
 
 CFLAGS = -m32 -ffreestanding -fno-pie -c
-OBJECTS = kernel_entry.o kernel.o framebuffer.o io.o pathstd.o time.o
+OBJECTS = kernel_entry.o kernel.o framebuffer.o io.o pathstd.o time.o idt.o isr.o interrupt.o
 
 # macro to build final image
 build:
@@ -19,6 +19,7 @@ bootloader:
 asm:
 	$(AS) bootloader/kernel_entry.s -f elf -o kernel_entry.o
 	$(AS) src/io.s -f elf -o io.o
+	$(AS) src/interrupt.s -f elf -o interrupt.o
 
 # compile all c files into objects
 compile:
@@ -26,6 +27,8 @@ compile:
 	$(CC) $(CFLAGS) src/framebuffer.c -o framebuffer.o
 	$(CC) $(CFLAGS) src/pathstd.c -o pathstd.o
 	$(CC) $(CFLAGS) src/time.c -o time.o
+	$(CC) $(CFLAGS) src/idt.c -o idt.o
+	$(CC) $(CFLAGS) src/isr.c -o isr.o
 
 # link everything into kernel.bin
 link:
@@ -38,6 +41,10 @@ final:
 # run on qemu
 qemu:
 	qemu-system-i386 -fda os-image
+
+# run on qemu with debug session
+debug:
+	qemu-system-i386 -fda os-image -S -gdb tcp::26000
 
 # run on bochs
 bochs:
