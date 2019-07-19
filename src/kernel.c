@@ -1,6 +1,7 @@
 #include "framebuffer.h"
 #include "time.h"
 #include "isr.h"
+#include "keyboard.h"
 
 #if defined(__linux__)
 #error "need to use cross-compiler"
@@ -27,10 +28,11 @@ int kmain(){
     isrs_init();
 
     // test interrupt
-    __asm__ __volatile__("int $20");
+    // __asm__ __volatile__("int $20");
 
-    fb_write_str(3,0,"Wow we made it!", BLACK, LIGHT_BLUE);
+    // fb_write_str(3,0,"Wow we made it!", BLACK, LIGHT_BLUE);
 
+    init_keyboard();
 
     return 0xdeadbeef;
 }

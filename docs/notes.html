@@ -276,4 +276,13 @@ Where I'm at now (as of end of day 7/11):
     - First I'm going through OS from Scratch (PDF) since it has a good example of a multi-stage bootloader. 
 
 
+A little discovery:
+===================
+
+As of today (7/19) I learned that global variables don't work correctly in my operating system. 
+
+If you want to use data, it has to be contained in a function. 
+
+Given the structure of my OS, this isn't a huge deal. Just declare everything in kmain() if you need to. 
+
 <!-- Markdeep: --><style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style><script src="markdeep.min.js"></script><script src="https://casual-effects.com/markdeep/latest/markdeep.min.js"></script><script>window.alreadyProcessedMarkdeep||(document.body.style.visibility="visible")</script>

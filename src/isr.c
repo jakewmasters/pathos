@@ -2,6 +2,10 @@
 #include "idt.h"
 #include "framebuffer.h"
 #include "pathstd.h"
+#include "io.h"
+
+// will this be ok?
+isr_t interrupt_handlers[256];
 
 /*
  * Initialize IDT
@@ -10,8 +14,6 @@
 void
 isrs_init()
 {
-    // fb_write_str(4,0,"registering isrs...", BLACK, WHITE);
-    idt_init();
     set_idt_entry(0, (unsigned int)isr0);
     set_idt_entry(1, (unsigned int)isr1);
     set_idt_entry(2, (unsigned int)isr2);
@@ -44,6 +46,42 @@ isrs_init()
     set_idt_entry(29, (unsigned int)isr29);
     set_idt_entry(30, (unsigned int)isr30);
     set_idt_entry(31, (unsigned int)isr31);
+
+    // remap PIC
+    outb(0x20, 0x11);
+    outb(0xA0, 0x11);
+    outb(0x21, 0x20);
+    outb(0xa1, 0x28);
+    outb(0x21, 0x04);
+    outb(0xa1, 0x02);
+    outb(0x21, 0x01);
+    outb(0xa1, 0x01);
+    outb(0x21, 0x0);
+    outb(0xa1, 0x0);
+
+    // install irqs
+    set_idt_entry(32, (unsigned int)irq0);
+    set_idt_entry(33, (unsigned int)irq1);
+    set_idt_entry(34, (unsigned int)irq2);
+    set_idt_entry(35, (unsigned int)irq3);
+    set_idt_entry(36, (unsigned int)irq4);
+    set_idt_entry(37, (unsigned int)irq5);
+    set_idt_entry(38, (unsigned int)irq6);
+    set_idt_entry(39, (unsigned int)irq7);
+    set_idt_entry(40, (unsigned int)irq8);
+    set_idt_entry(41, (unsigned int)irq9);
+    set_idt_entry(42, (unsigned int)irq10);
+    set_idt_entry(43, (unsigned int)irq11);
+    set_idt_entry(44, (unsigned int)irq12);
+    set_idt_entry(45, (unsigned int)irq13);
+    set_idt_entry(46, (unsigned int)irq14);
+    set_idt_entry(47, (unsigned int)irq15);
+
+    // now that all idt entries are set, we can call lidtl
+    idt_init();
+
+    // all interrupt-handling is in place, can not restore interrupts
+    __asm__ __volatile__("sti");
 }
 
 // will have additional functionality, eventually
@@ -90,4 +128,22 @@ isr_handler(regs_t registers)
     d_str(registers.interrupt_num, str);
     fb_write_str(6,0, str, BLACK, WHITE);
     fb_write_str(7,0, exception_messages[registers.interrupt_num], BLACK, WHITE); // this isn't working...
+}
+
+void
+register_interrupt_handler(unsigned char n, isr_t handler)
+{
+    interrupt_handlers[n] = handler;
+}
+
+void
+irq_handler(regs_t registers)
+{
+    if (registers.interrupt_num >= 40) outb(0xA0, 0x20);
+    outb(0x20, 0x20);
+
+    if (interrupt_handlers[registers.interrupt_num] != 0){
+        isr_t handler = interrupt_handlers[registers.interrupt_num];
+        handler(registers);
+    }
 }
