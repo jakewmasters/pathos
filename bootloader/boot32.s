@@ -4,9 +4,11 @@
 ; this bootloader switches from 16-bit real mode
 ; to 32-bit protected mode
 
+; the following two lines cause the entire OS to be position-dependent
 [org 0x7c00]
 KERNEL_OFFSET equ 0x1000
 
+; bootloader entry point
 start:
     ; setup stack
     mov bp, 0x9000
@@ -22,12 +24,14 @@ start:
     call load_kernel
 
     ; the BIG switch
-    call switch_to_pm  ; all good up to HERE (7/12 @ 4:30 pm)
+    call switch_to_pm
     
     jmp hang ; should never reach this
 
 hang:
     jmp hang
+
+;; helper functions for 16-bit real mode ONLY ;;
 
 bios_print:
     pusha
@@ -60,6 +64,9 @@ bios_move_cursor:
     popa
     ret
 
+;; end real mode helper functions ;;
+
+;; functions for loading kernel into memory ;;
 
 [bits 16]
 
@@ -105,15 +112,14 @@ switch_to_pm:
     mov cr0, eax
     jmp CODE_SEG:init_pm
 
+;; end kernel load functions ;;
 
 
-
-; THE GREAT DIVIDE
+; THE GREAT DIVIDE (between real mode and protected mode)
 ; /\/\/\/\/\/\/\/\
 
 
-
-
+;; once kernel and GDT are loaded, call kernel ;;
 
 [bits 32]
 BEGIN_PM:
@@ -143,7 +149,8 @@ init_pm:
     mov esp, ebp
     call BEGIN_PM
 
-; 32-bit print to VRAM
+;; helper functions for 32-bit protected mode ;;
+
 print_string:
     pusha
     add eax, VRAM
@@ -161,7 +168,10 @@ done:
     popa
     ret
 
-; gdt stuff;
+;; end helper functions for 32-bit protected mode ;;
+
+;; GDT specification ;;
+
 gdt_start:
 
 gdt_null:
@@ -193,8 +203,9 @@ gdt_descriptor:
 CODE_SEG equ gdt_code - gdt_start
 DATA_SEG equ gdt_data - gdt_start
 
+;; end GDT specification ;;
 
-; bootloader variables
+; bootloader static variables
 VRAM equ 0xb8000
 COLOR equ 0x0b
 BOOT_DRIVE: db 0

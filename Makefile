@@ -52,6 +52,11 @@ debug:
 bochs:
 	bochs
 
+# produce an ISO for vbox
+# iso:
+	# genisoimage -no-emul-boot -boot-load-size 32 -o pathos.iso -V PathOS -b boot.bin iso/
+	# dd if=os-image of=pathos.img bs=512 count=32
+
 # clean up intermediate files
 clean:
 	rm *.bin *.o os-image
