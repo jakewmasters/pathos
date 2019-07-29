@@ -5,7 +5,7 @@ CC = i686-elf-gcc
 LD = ld
 
 CFLAGS = -m32 -ffreestanding -fno-pie -c
-OBJECTS = kernel_entry.o kernel.o framebuffer.o io.o pathstd.o time.o idt.o isr.o interrupt.o keyboard.o
+OBJECTS = kernel_entry.o kernel.o framebuffer.o io.o pathstd.o time.o idt.o isr.o interrupt.o keyboard.o shell.o
 
 # macro to build final image
 build:
@@ -30,6 +30,7 @@ compile:
 	$(CC) $(CFLAGS) src/idt.c -o idt.o
 	$(CC) $(CFLAGS) src/isr.c -o isr.o
 	$(CC) $(CFLAGS) src/keyboard.c -o keyboard.o
+	$(CC) $(CFLAGS) src/shell.c -o shell.o
 
 # link everything into kernel.bin
 link:
@@ -53,4 +54,4 @@ bochs:
 
 # clean up intermediate files
 clean:
-	rm *.bin *.o
+	rm *.bin *.o os-image

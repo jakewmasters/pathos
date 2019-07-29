@@ -3,18 +3,24 @@
 #include "pathstd.h"
 #include "isr.h"
 
+// need to be able to tell shell when to flush buffer
+#include "shell.h"
+
 void
 print_letter(unsigned char scancode)
 {
     switch(scancode){
         case 0x10:
-            fb_write_str(10, 20, "Q", BLACK, WHITE);
+            update_shell('Q');
+            // fb_write_str(10, 20, "Q", BLACK, WHITE);
             break;
         case 0x11:
-            fb_write_str(10, 20, "W", BLACK, WHITE);
+            update_shell('W');
+            // fb_write_str(10, 20, "W", BLACK, WHITE);
             break;
         case 0x12:
-            fb_write_str(10, 20, "E", BLACK, WHITE);
+            update_shell('E');
+            // fb_write_str(10, 20, "E", BLACK, WHITE);
             break;
         case 0x13:
             fb_write_str(10, 20, "R", BLACK, WHITE);
