@@ -33,6 +33,7 @@ update_shell(unsigned char letter)
         fb_col++;
     }
     fb_write((fb_row*80)+fb_col, letter, BLACK, WHITE);
+    fb_move_cursor(fb_row, fb_col+1);
     cmd_buf[buf_index] = letter;
     buf_index++; // better hope buffer is not exceeded!
 }

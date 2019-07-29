@@ -33,6 +33,30 @@ fb_move_cursor(unsigned int row, unsigned int col)
 }
 
 /*
+ * enable text mode cursor
+ * parameters describe shape of cursor (default is 0,1)
+ */
+void
+fb_enable_cursor(unsigned char start, unsigned char end)
+{
+    outb(FB_COMMAND_PORT, 0x0a);
+    outb(FB_DATA_PORT, (inb(FB_DATA_PORT) & 0xc0) | start);
+
+    outb(FB_COMMAND_PORT, 0x0b);
+    outb(FB_DATA_PORT, (inb(FB_DATA_PORT) & 0xe0) | end);
+}
+
+/*
+ * disable text mode cursor
+ */
+void
+fb_disable_cursor()
+{
+    outb(FB_COMMAND_PORT, 0x0a);
+    outb(FB_DATA_PORT, 0x20);
+}
+
+/*
  * abstractions from core
  */
 
