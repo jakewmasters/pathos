@@ -2,8 +2,11 @@
 #include "time.h"
 #include "isr.h"
 #include "keyboard.h"
-#include "shell.h"
 #include "vm.h"
+
+// lib
+#include "../lib/shell.h"
+
 
 #if defined(__linux__)
 #error "need to use cross-compiler"

@@ -1,5 +1,7 @@
 #include "io.h"
-#include "pathstd.h"
+
+// lib
+#include "../lib/pathstd.h"
 
 /*
  * core functions

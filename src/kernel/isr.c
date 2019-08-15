@@ -1,8 +1,10 @@
 #include "isr.h"
 #include "idt.h"
 #include "framebuffer.h"
-#include "pathstd.h"
 #include "io.h"
+
+// lib
+#include "../lib/pathstd.h"
 
 // will this be ok?
 isr_t interrupt_handlers[256];

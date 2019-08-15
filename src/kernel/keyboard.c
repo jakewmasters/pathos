@@ -1,10 +1,10 @@
 #include "io.h"
 #include "framebuffer.h"
-#include "pathstd.h"
 #include "isr.h"
 
-// need to be able to tell shell when to flush buffer
-#include "shell.h"
+// lib
+#include "../lib/pathstd.h"
+#include "../lib/shell.h" // need to be able to tell shell when to flush buffer
 
 void
 print_letter(unsigned char scancode)

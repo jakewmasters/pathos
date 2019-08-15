@@ -18,20 +18,20 @@ bootloader:
 # build all assembly parts as elfs
 asm:
 	$(AS) bootloader/kernel_entry.s -f elf -o kernel_entry.o
-	$(AS) src/io.s -f elf -o io.o
-	$(AS) src/interrupt.s -f elf -o interrupt.o
+	$(AS) src/kernel/io.s -f elf -o io.o
+	$(AS) src/kernel/interrupt.s -f elf -o interrupt.o
 
 # compile all c files into objects
 compile:
-	$(CC) $(CFLAGS) src/kernel.c -o kernel.o
-	$(CC) $(CFLAGS) src/framebuffer.c -o framebuffer.o
-	$(CC) $(CFLAGS) src/pathstd.c -o pathstd.o
-	$(CC) $(CFLAGS) src/time.c -o time.o
-	$(CC) $(CFLAGS) src/idt.c -o idt.o
-	$(CC) $(CFLAGS) src/isr.c -o isr.o
-	$(CC) $(CFLAGS) src/keyboard.c -o keyboard.o
-	$(CC) $(CFLAGS) src/shell.c -o shell.o
-	$(CC) $(CFLAGS) src/vm.c -o vm.o
+	$(CC) $(CFLAGS) src/kernel/kernel.c -o kernel.o
+	$(CC) $(CFLAGS) src/kernel/framebuffer.c -o framebuffer.o
+	$(CC) $(CFLAGS) src/kernel/time.c -o time.o
+	$(CC) $(CFLAGS) src/kernel/idt.c -o idt.o
+	$(CC) $(CFLAGS) src/kernel/isr.c -o isr.o
+	$(CC) $(CFLAGS) src/kernel/keyboard.c -o keyboard.o
+	$(CC) $(CFLAGS) src/kernel/vm.c -o vm.o
+	$(CC) $(CFLAGS) src/lib/pathstd.c -o pathstd.o
+	$(CC) $(CFLAGS) src/lib/shell.c -o shell.o
 
 # link everything into kernel.bin
 link:

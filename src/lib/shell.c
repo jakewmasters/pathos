@@ -1,5 +1,7 @@
-#include "framebuffer.h"
 #include "pathstd.h"
+
+// kernel
+#include "../kernel/framebuffer.h"
 
 // global shell data
 unsigned int fb_row = -1; // there are 25 of these
