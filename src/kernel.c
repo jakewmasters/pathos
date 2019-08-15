@@ -1,6 +1,9 @@
 #include "framebuffer.h"
 #include "time.h"
 #include "isr.h"
+#include "keyboard.h"
+#include "shell.h"
+#include "vm.h"
 
 #if defined(__linux__)
 #error "need to use cross-compiler"
@@ -10,27 +13,43 @@
 #error "compile for the right target ;)"
 #endif
 
+
+/*
+ * Main Goals:
+ *   - enable paging
+ *   - filesystem
+ *   - finish shell
+ *   - add basic, text-based applications (text editor)
+ * On the Horizon:
+ *   - video mode GUI
+ *   - audio support
+ *   - user processes
+ */
+
 int kmain(){
-    fb_clear();
+   fb_clear();
+   // fb_disable_cursor();
+   // char *str = "Welcome!";
+   // fb_write_str(10, 30, str, BLACK, CYAN);
+   // fb_move_cursor(0,0);
 
-    // char *str = "Welcome!";
-    // fb_write_str(10, 30, str, BLACK, CYAN);
+   isrs_init();
 
-    // fb_move_cursor(0,0);
+   init_keyboard();
 
-    /*
-     * Next steps:
-     * - IDT + interrupt stuff
-     * - Keyboard
-     * - Audio y e e t
+   // fake_shell();
+
+   // enable_paging();
+
+   /*
+      Operation Ragnaros: BY FIRE BE PURGED!
+         - Time to clean everything up. 
+         - The goal is to have a simple, text-mode OS. 
+         - Currently, the shell governs all input. 
+         - Let's create a buffer manager so we can first pop up a menu, and from there either use a shell or (hopefully) a video GUI. 
      */
-    isrs_init();
 
-    // test interrupt
-    __asm__ __volatile__("int $20");
+   char *test = "this is just a test string";
 
-    fb_write_str(3,0,"Wow we made it!", BLACK, LIGHT_BLUE);
-
-
-    return 0xdeadbeef;
+   return 0xdeadbeef;
 }

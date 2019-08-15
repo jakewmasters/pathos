@@ -5,7 +5,7 @@ CC = i686-elf-gcc
 LD = ld
 
 CFLAGS = -m32 -ffreestanding -fno-pie -c
-OBJECTS = kernel_entry.o kernel.o framebuffer.o io.o pathstd.o time.o idt.o isr.o interrupt.o
+OBJECTS = kernel_entry.o kernel.o framebuffer.o io.o pathstd.o time.o idt.o isr.o interrupt.o keyboard.o shell.o vm.o
 
 # macro to build final image
 build:
@@ -29,6 +29,9 @@ compile:
 	$(CC) $(CFLAGS) src/time.c -o time.o
 	$(CC) $(CFLAGS) src/idt.c -o idt.o
 	$(CC) $(CFLAGS) src/isr.c -o isr.o
+	$(CC) $(CFLAGS) src/keyboard.c -o keyboard.o
+	$(CC) $(CFLAGS) src/shell.c -o shell.o
+	$(CC) $(CFLAGS) src/vm.c -o vm.o
 
 # link everything into kernel.bin
 link:
@@ -50,6 +53,11 @@ debug:
 bochs:
 	bochs
 
+# produce an ISO for vbox
+# iso:
+	# genisoimage -no-emul-boot -boot-load-size 32 -o pathos.iso -V PathOS -b boot.bin iso/
+	# dd if=os-image of=pathos.img bs=512 count=32
+
 # clean up intermediate files
 clean:
-	rm *.bin *.o
+	rm *.bin *.o os-image
